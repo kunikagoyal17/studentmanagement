@@ -1,0 +1,40 @@
+// service/StudentServiceImpl.java
+import org.springframework.stereotype.Service;
+import repository.StudentRepository;
+import model.Student;
+import java.util.List;
+
+@Service
+public class StudentServiceImpl implements StudentService {
+
+    private final StudentRepository repo;
+
+    public StudentServiceImpl(StudentRepository repo) {
+        this.repo = repo;
+    }
+
+    public List<Student> getAllStudents() {
+        return repo.findAll();
+    }
+
+    public Student getStudentById(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    public Student createStudent(Student student) {
+        return repo.save(student);
+    }
+
+    public Student updateStudent(Long id, Student updatedStudent) {
+        Student student = getStudentById(id);
+        if (student == null) return null;
+        student.setName(updatedStudent.getName());
+        student.setEmail(updatedStudent.getEmail());
+        student.setCourse(updatedStudent.getCourse());
+        return repo.save(student);
+    }
+
+    public void deleteStudent(Long id) {
+        repo.deleteById(id);
+    }
+}
